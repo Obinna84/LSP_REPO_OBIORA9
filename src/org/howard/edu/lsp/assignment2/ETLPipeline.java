@@ -10,8 +10,8 @@ import java.math.RoundingMode;
 
 public class ETLPipeline {
     public static void main(String[] args) {
-        String inputFilePath = "LSP_REPO_OBIORA9/data/employees.csv";
-        String outputFilePath = "LSP_REPO_OBIORA9/data/transformed_employees.csv";
+        String inputFilePath = "data/employees.csv";
+        String outputFilePath = "data/transformed_employees.csv";
 
         int rowsRead = 0;
         int rowsTransformed = 0;
