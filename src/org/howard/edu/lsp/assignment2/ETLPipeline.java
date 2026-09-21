@@ -6,9 +6,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
-import org.howard.edu.lsp.assignment3.Employee;
+import java.math.RoundingMode;
 
-public class ETLPipline {
+public class ETLPipeline {
     public static void main(String[] args) {
         String inputFilePath = "data/employees.csv";
         String outputFilePath = "data/transformed_employees.csv";
@@ -45,8 +45,6 @@ public class ETLPipline {
                 for (int i = 0; i < fields.length; i++) {
                     fields[i] = fields[i].trim();
                 }
-
-                Employee employee;
 
                 int employeeId;
                 BigDecimal hoursWorked;
@@ -87,19 +85,64 @@ public class ETLPipline {
 
                 //Department unchanged
                 String department = fields[2];
-                employee = new Employee(employeeId, name, department, hoursWorked, hourlyRate);
 
                 //Calculate Base and Overtime Pay
-                employee.setGrossPay();
+                BigDecimal grossPay;
+                BigDecimal forty = new BigDecimal("40.00");
 
-                //Set Pay Level based on Gross Pay
-                employee.setPayLevel();
+                if (hoursWorked.compareTo(forty) <= 0) {
+                    grossPay = hoursWorked.multiply(hourlyRate);
+                } else {
+                    BigDecimal regularPay = forty.multiply(hourlyRate);
+                    BigDecimal overtimeHours = hoursWorked.subtract(forty);
+                    BigDecimal overtimePay = overtimeHours.multiply(hourlyRate).multiply(new BigDecimal("1.5"));
+                    grossPay = regularPay.add(overtimePay);
+                }
+
+                //Apply %5 bonus for employees in IT Department after overtime calc
+                if (department.equalsIgnoreCase("IT")) {
+                    BigDecimal bonus = grossPay.multiply(new BigDecimal("0.05"));
+                    grossPay = grossPay.add(bonus);
+                }
+
+                //Round Gross Pay to 2 decimal places
+                String payLevel;
+
+                if (grossPay.compareTo(new BigDecimal("500.00")) < 0) {
+                    payLevel = "Low";
+                } else if (grossPay.compareTo(new BigDecimal("1000.00")) < 0) {
+                    payLevel = "Medium";
+                } else if (grossPay.compareTo(new BigDecimal("2000.00")) < 0) {
+                    payLevel = "High";
+                } else {
+                    payLevel = "Executive";
+                }
 
                 //Determine Employment Status
-                employee.determineEmploymentStatus();
+                String employmentStatus;
+
+                if (hoursWorked.compareTo(new BigDecimal("30.00")) < 0) {
+                    employmentStatus = "Part-Time";
+                } else {
+                    employmentStatus = "Full-Time";
+                }
+
+                //Format numeric values to 2 decimal places
+                String hoursOutput = hoursWorked.setScale(2, RoundingMode.HALF_UP).toPlainString();
+                String rateOutput = hourlyRate.setScale(2, RoundingMode.HALF_UP).toPlainString();
+                String grossPayOutput = grossPay.setScale(2, RoundingMode.HALF_UP).toPlainString();
 
                 //Write the transformed data to the output file
-                writer.write(employee.toString());
+                writer.write(
+                    employeeId + "," +
+                    name + "," +
+                    department + "," +
+                    hoursOutput + "," +
+                    rateOutput + "," +
+                    grossPayOutput + "," +
+                    payLevel + "," +
+                    employmentStatus
+                );
 
                 writer.newLine();
                 rowsTransformed++;
@@ -114,5 +157,3 @@ public class ETLPipline {
         } catch (IOException e) { System.out.println("Error processing files: " + e.getMessage()); }
     }
 }
-
-
