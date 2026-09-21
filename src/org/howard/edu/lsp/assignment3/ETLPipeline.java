@@ -1,4 +1,4 @@
-package org.howard.edu.lsp.assignment2;
+package org.howard.edu.lsp.assignment3;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import org.howard.edu.lsp.assignment3.Employee;
 
-public class ETLPipline {
+public class ETLPipeline {
     public static void main(String[] args) {
-        String inputFilePath = "LSP_REPO_OBIORA9/data/employees.csv";
-        String outputFilePath = "LSP_REPO_OBIORA9/data/transformed_employees.csv";
+        String inputFilePath = "data/employees.csv";
+        String outputFilePath = "data/transformed_employees.csv";
 
         int rowsRead = 0;
         int rowsTransformed = 0;
@@ -114,5 +114,3 @@ public class ETLPipline {
         } catch (IOException e) { System.out.println("Error processing files: " + e.getMessage()); }
     }
 }
-
-

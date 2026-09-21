@@ -63,9 +63,10 @@ public class Employee {
                 }
 
                 //Apply %5 bonus for employees in IT Department after overtime calc
-                if (department.equalsIgnoreCase("IT")) {
+                if (department.equals("IT")) {
                     BigDecimal bonus = grossPay.multiply(new BigDecimal("0.05"));
                     grossPay = grossPay.add(bonus);
+                    grossPay = grossPay.setScale(2, RoundingMode.HALF_UP);
                 }
         this.grossPay = grossPay;
         
@@ -74,7 +75,7 @@ public class Employee {
         if (this.grossPay.compareTo(new BigDecimal("500.00")) < 0) {
             this.payLevel = "Low";
         } else if (this.grossPay.compareTo(new BigDecimal("1000.00")) < 0) {
-            this.payLevel = "Medium";
+            this.payLevel = "Standard";
         } else if (this.grossPay.compareTo(new BigDecimal("2000.00")) < 0) {
             this.payLevel = "High";
         } else {
@@ -94,7 +95,7 @@ public class Employee {
                 department + "," +
                 hoursWorked.setScale(2, RoundingMode.HALF_UP).toPlainString() + "," +
                 hourlyRate.setScale(2, RoundingMode.HALF_UP).toPlainString() + "," +
-                grossPay.setScale(2, RoundingMode.HALF_UP).toPlainString() + "," +
+                grossPay.toPlainString() + "," +
                 payLevel + "," +
                 employmentStatus;
     }
