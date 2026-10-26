@@ -9,7 +9,7 @@
 
 ## Complete AI Conversation
 
-**Conversation link:** [INSERT SHAREABLE CHATGPT CONVERSATION LINK]
+**Conversation link:** (https://chatgpt.com/share/6adfe2ee-ddcc-83e9-ae3b-160946e363da)
 
 The linked conversation contains the complete prompts and AI responses used while completing Question 2, including the discussion of architectural alternatives and the development of the three deliverables.
 
